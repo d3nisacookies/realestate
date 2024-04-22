@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
+import UpdateAccount from "./updateAccount";
 
 const SearchBar = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [selectedAccount, setSelectedAccount] = useState(null);
+  const [updatedAccount, setUpdatedAccount] = useState(null);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -16,6 +18,14 @@ const SearchBar = () => {
 
   const handleAccountSelect = (account) => {
     setSelectedAccount(account);
+  };
+
+  const handleUpdateAccount = async (updatedAccount) => {
+    if (selectedAccount) {
+      //api logic hre please
+      setSelectedAccount(null);
+      setUpdatedAccount(null);
+    }
   };
 
   const handleViewAccount = () => {
@@ -46,8 +56,24 @@ const SearchBar = () => {
       {selectedAccount && (
         <div>
           <h2>Selected Account: {selectedAccount.name}</h2>
+          <input
+            type="text"
+            value={updatedAccount?.name || ""}
+            onChange={(e) =>
+              setUpdatedAccount({...updatedAccount, name: e.target.value })
+            }
+          />
+          <button onClick={() => handleUpdateAccount(updatedAccount)}>
+            Update Account
+          </button>
           <button onClick={handleViewAccount}>View Account</button>
           <button onClick={handleSuspendAccount}>Suspend Account</button>
+          <UpdateAccount
+            selectedAccount={selectedAccount}
+            updatedAccount={updatedAccount}
+            setUpdatedAccount={setUpdatedAccount}
+            handleUpdateAccount={handleUpdateAccount}
+          />
         </div>
       )}
     </div>
